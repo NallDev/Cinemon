@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrinaldi.cinemon.R
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
 import com.afrinaldi.cinemon.databinding.ItemMoviesBinding
 import com.bumptech.glide.Glide

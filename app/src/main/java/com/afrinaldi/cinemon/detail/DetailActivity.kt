@@ -3,10 +3,6 @@ package com.afrinaldi.cinemon.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.afrinaldi.cinemon.R
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemTopRated
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemUpcoming
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING

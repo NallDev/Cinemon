@@ -3,9 +3,9 @@ package com.afrinaldi.cinemon.nowplaying
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
-import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
 import com.afrinaldi.cinemon.core.ui.NowPlayingListAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
@@ -27,6 +27,7 @@ class NowPlayingActivity : AppCompatActivity() {
         _binding = ActivityNowPlayingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showShimmerBar(true)
         showNowPlaying()
     }
 
@@ -48,6 +49,7 @@ class NowPlayingActivity : AppCompatActivity() {
             }
 
             if (listNowPlaying.isNotEmpty()){
+                showShimmerBar(false)
                 binding.rvNowPlaying.adapter = NowPlayingListAdapter(listNowPlaying) { data ->
                     Intent(this, DetailActivity::class.java).also { intent ->
                         intent.putExtra(TITLE, data.title)
@@ -59,5 +61,9 @@ class NowPlayingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showShimmerBar(isLoading: Boolean) {
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 }

@@ -3,19 +3,17 @@ package com.afrinaldi.cinemon.popular
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
-import com.afrinaldi.cinemon.core.ui.PopularAdapter
 import com.afrinaldi.cinemon.core.ui.PopularListAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
 import com.afrinaldi.cinemon.core.utils.TITLE
-import com.afrinaldi.cinemon.databinding.ActivityNowPlayingBinding
 import com.afrinaldi.cinemon.databinding.ActivityPopularBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
 import com.afrinaldi.cinemon.home.MainViewModel
-import com.bumptech.glide.Glide
 
 class PopularActivity : AppCompatActivity() {
     private var _binding : ActivityPopularBinding? = null
@@ -27,7 +25,7 @@ class PopularActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityPopularBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        showShimmerBar(true)
         showPopular()
     }
 
@@ -50,6 +48,7 @@ class PopularActivity : AppCompatActivity() {
             }
 
             if (listPopular.isNotEmpty()){
+                showShimmerBar(false)
                 binding.rvPopular.adapter = PopularListAdapter(listPopular) { data ->
                     Intent(this, DetailActivity::class.java).also { intent ->
                         intent.putExtra(TITLE, data.title)
@@ -61,5 +60,9 @@ class PopularActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showShimmerBar(isLoading: Boolean) {
+        binding.loading.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 }

@@ -3,7 +3,6 @@ package com.afrinaldi.cinemon.home
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.R
@@ -15,10 +14,7 @@ import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
 import com.afrinaldi.cinemon.core.ui.PopularAdapter
 import com.afrinaldi.cinemon.core.ui.TopRatedAdapter
 import com.afrinaldi.cinemon.core.ui.UpcomingAdapter
-import com.afrinaldi.cinemon.core.utils.IMAGE
-import com.afrinaldi.cinemon.core.utils.OVERVIEW
-import com.afrinaldi.cinemon.core.utils.RATING
-import com.afrinaldi.cinemon.core.utils.TITLE
+import com.afrinaldi.cinemon.core.utils.*
 import com.afrinaldi.cinemon.databinding.ActivityMainBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
 import com.afrinaldi.cinemon.nowplaying.NowPlayingActivity
@@ -35,6 +31,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val listPopular = ArrayList<ResultsItemPopular>()
     private val listTopRated = ArrayList<ResultsItemTopRated>()
     private val listUpcoming = ArrayList<ResultsItemUpcoming>()
+    private val dialog = LoadingDialog(this)
 
     private val mainViewModel : MainViewModel by viewModels()
 
@@ -47,6 +44,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         binding.tvToNowPlaying.setOnClickListener(this)
         binding.tvToTopRated.setOnClickListener(this)
         binding.tvToUpcoming.setOnClickListener(this)
+        dialog.startLoading()
 
         showNowPlaying()
         showPopular()
@@ -72,6 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             if (listUpcoming.isNotEmpty()){
+                dialog.isDismiss()
                 binding.rvUpcoming.adapter = UpcomingAdapter(listUpcoming) { data ->
                     Intent(this, DetailActivity::class.java).also { intent ->
                         intent.putExtra(TITLE, data.title)
