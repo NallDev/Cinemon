@@ -19,6 +19,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/recommendation"
             android:textSize="16sp"
+            android:textColor="?attr/colorOnSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -96,6 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_weight="1"
+
+                android:textColor="?attr/colorOnSecondary"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/now_playing"
                 android:textSize="16sp" />
@@ -139,6 +142,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_weight="1"
+                android:textColor="?attr/colorOnSecondary"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/popular"
                 android:textSize="16sp" />
@@ -159,6 +163,7 @@
             android:layout_height="240dp"
             android:layout_marginStart="16dp"
             android:orientation="horizontal"
+            android:textColor="?attr/colorOnSecondary"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -184,6 +189,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/top_rated"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="16sp" />
 
             <TextView
@@ -227,6 +233,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="@string/upcoming"
+                android:textColor="?attr/colorOnSecondary"
                 android:textSize="16sp" />
 
             <TextView
