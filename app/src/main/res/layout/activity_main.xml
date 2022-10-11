@@ -101,6 +101,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_to_now_playing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -143,6 +144,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_to_popular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -185,6 +187,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_to_top_rated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -223,10 +226,11 @@
                 android:layout_marginEnd="24dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_semibold"
-                android:text="@string/popular"
+                android:text="@string/upcoming"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_to_upcoming"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

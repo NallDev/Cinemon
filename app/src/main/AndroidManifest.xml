@@ -16,6 +16,18 @@
         android:theme="@style/Theme.Cinemon"
         tools:targetApi="31">
         <activity
+            android:name=".nowplaying.NowPlayingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".upcoming.UpcomingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".toprated.TopRatedActivity"
+            android:exported="false" />
+        <activity
+            android:name=".popular.PopularActivity"
+            android:exported="false" />
+        <activity
             android:name=".detail.DetailActivity"
             android:exported="false" />
         <activity

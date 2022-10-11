@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
+import com.afrinaldi.cinemon.R
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemTopRated
@@ -19,9 +21,13 @@ import com.afrinaldi.cinemon.core.utils.RATING
 import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityMainBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
+import com.afrinaldi.cinemon.nowplaying.NowPlayingActivity
+import com.afrinaldi.cinemon.popular.PopularActivity
+import com.afrinaldi.cinemon.toprated.TopRatedActivity
+import com.afrinaldi.cinemon.upcoming.UpcomingActivity
 import com.bumptech.glide.Glide
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var _binding : ActivityMainBinding? = null
     private val binding get() = _binding!!
 
@@ -36,6 +42,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.tvToPopular.setOnClickListener(this)
+        binding.tvToNowPlaying.setOnClickListener(this)
+        binding.tvToTopRated.setOnClickListener(this)
+        binding.tvToUpcoming.setOnClickListener(this)
 
         showNowPlaying()
         showPopular()
@@ -176,6 +187,31 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra(OVERVIEW, data.overview)
                         startActivity(intent)
                     }
+                }
+            }
+        }
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.tv_to_upcoming -> {
+                Intent(this, UpcomingActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.tv_to_now_playing -> {
+                Intent(this, NowPlayingActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.tv_to_top_rated -> {
+                Intent(this, TopRatedActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.tv_to_popular -> {
+                Intent(this, PopularActivity::class.java).also {
+                    startActivity(it)
                 }
             }
         }
