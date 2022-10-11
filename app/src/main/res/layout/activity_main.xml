@@ -51,6 +51,30 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:src="@tools:sample/avatars" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="#C3141B25"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title_recommendation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="@color/gold"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_recommendation"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_recommendation"
+                    app:layout_constraintStart_toStartOf="@+id/iv_recommendation"
+                    app:layout_constraintTop_toTopOf="@+id/iv_recommendation"
+                    tools:text="Title" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>

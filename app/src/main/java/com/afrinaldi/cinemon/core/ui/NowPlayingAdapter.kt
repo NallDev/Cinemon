@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.afrinaldi.cinemon.R
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
 import com.afrinaldi.cinemon.databinding.ItemMoviesBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class NowPlayingAdapter(private val data: List<ResultsItemNowPlaying> ,
                         private val listener: (ResultsItemNowPlaying) -> Unit) : RecyclerView.Adapter<NowPlayingAdapter.ViewHolder>() {
@@ -36,6 +38,10 @@ class NowPlayingAdapter(private val data: List<ResultsItemNowPlaying> ,
 
                 Glide.with(context)
                     .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2${item.posterPath}")
+                    .apply(
+                        RequestOptions()
+                            .placeholder(R.drawable.ic_image)
+                    )
                     .into(ivMain)
             }
             itemView.setOnClickListener{

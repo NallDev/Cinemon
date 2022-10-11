@@ -13,6 +13,10 @@ import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
 import com.afrinaldi.cinemon.core.ui.PopularAdapter
 import com.afrinaldi.cinemon.core.ui.TopRatedAdapter
 import com.afrinaldi.cinemon.core.ui.UpcomingAdapter
+import com.afrinaldi.cinemon.core.utils.IMAGE
+import com.afrinaldi.cinemon.core.utils.OVERVIEW
+import com.afrinaldi.cinemon.core.utils.RATING
+import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityMainBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
 import com.bumptech.glide.Glide
@@ -57,7 +61,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (listUpcoming.isNotEmpty()){
-                binding.rvUpcoming.adapter = UpcomingAdapter(listUpcoming)
+                binding.rvUpcoming.adapter = UpcomingAdapter(listUpcoming) { data ->
+                    Intent(this, DetailActivity::class.java).also { intent ->
+                        intent.putExtra(TITLE, data.title)
+                        intent.putExtra(RATING, data.voteAverage.toString())
+                        intent.putExtra(IMAGE, data.posterPath)
+                        intent.putExtra(OVERVIEW, data.overview)
+                        startActivity(intent)
+                    }
+                }
             }
         }
     }
@@ -80,7 +92,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (listTopRated.isNotEmpty()){
-                binding.rvTopRated.adapter = TopRatedAdapter(listTopRated)
+                binding.rvTopRated.adapter = TopRatedAdapter(listTopRated) { data ->
+                    Intent(this, DetailActivity::class.java).also { intent ->
+                        intent.putExtra(TITLE, data.title)
+                        intent.putExtra(RATING, data.voteAverage.toString())
+                        intent.putExtra(IMAGE, data.posterPath)
+                        intent.putExtra(OVERVIEW, data.overview)
+                        startActivity(intent)
+                    }
+                }
             }
         }
     }
@@ -91,6 +111,16 @@ class MainActivity : AppCompatActivity() {
             Glide.with(this)
                 .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2${it[0].posterPath}")
                 .into(binding.ivRecommendation)
+            binding.tvTitleRecommendation.text = it[0].title
+            binding.ivRecommendation.setOnClickListener { _ ->
+                Intent(this, DetailActivity::class.java).also { intent ->
+                    intent.putExtra(TITLE, it[0].title)
+                    intent.putExtra(RATING, it[0].voteAverage.toString())
+                    intent.putExtra(IMAGE, it[0].posterPath)
+                    intent.putExtra(OVERVIEW, it[0].overview)
+                    startActivity(intent)
+                }
+            }
 
             listPopular.clear()
             for (i in it.indices){
@@ -107,7 +137,15 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (listPopular.isNotEmpty()){
-                binding.rvPopular.adapter = PopularAdapter(listPopular)
+                binding.rvPopular.adapter = PopularAdapter(listPopular) { data ->
+                    Intent(this, DetailActivity::class.java).also { intent ->
+                        intent.putExtra(TITLE, data.title)
+                        intent.putExtra(RATING, data.voteAverage.toString())
+                        intent.putExtra(IMAGE, data.posterPath)
+                        intent.putExtra(OVERVIEW, data.overview)
+                        startActivity(intent)
+                    }
+                }
             }
         }
     }
@@ -132,7 +170,10 @@ class MainActivity : AppCompatActivity() {
             if (listNowPlaying.isNotEmpty()){
                 binding.rvNowPlaying.adapter = NowPlayingAdapter(listNowPlaying) { data ->
                     Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra("data", data)
+                        intent.putExtra(TITLE, data.title)
+                        intent.putExtra(RATING, data.voteAverage.toString())
+                        intent.putExtra(IMAGE, data.posterPath)
+                        intent.putExtra(OVERVIEW, data.overview)
                         startActivity(intent)
                     }
                 }

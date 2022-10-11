@@ -3,7 +3,13 @@ package com.afrinaldi.cinemon.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
+import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
+import com.afrinaldi.cinemon.core.remote.response.ResultsItemTopRated
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemUpcoming
+import com.afrinaldi.cinemon.core.utils.IMAGE
+import com.afrinaldi.cinemon.core.utils.OVERVIEW
+import com.afrinaldi.cinemon.core.utils.RATING
+import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityDetailBinding
 import com.bumptech.glide.Glide
 
@@ -16,15 +22,18 @@ class DetailActivity : AppCompatActivity() {
         _binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val data = intent.getParcelableExtra<ResultsItemNowPlaying>("data")
+        val title = intent.getStringExtra(TITLE)
+        val image = intent.getStringExtra(IMAGE)
+        val rating = intent.getStringExtra(RATING)
+        val desc = intent.getStringExtra(OVERVIEW)
 
         Glide.with(this)
-            .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2${data!!.posterPath}")
+            .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2$image")
             .into(binding.ivImage)
 
-        binding.tvTitle.text = data.title
-        binding.tvRating.text = data.voteAverage.toString()
-        binding.tvDescription.text = data.overview
+        binding.tvTitle.text = title
+        binding.tvRating.text = rating
+        binding.tvDescription.text = desc
 
     }
 }
