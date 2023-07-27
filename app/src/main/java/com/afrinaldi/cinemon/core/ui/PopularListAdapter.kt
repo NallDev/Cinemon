@@ -3,6 +3,8 @@ package com.afrinaldi.cinemon.core.ui
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afrinaldi.cinemon.R
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
@@ -10,7 +12,7 @@ import com.afrinaldi.cinemon.databinding.ItemListMoviesBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class PopularListAdapter(private val data: List<ResultsItemPopular>, private val listener: (ResultsItemPopular) -> Unit) : RecyclerView.Adapter<PopularListAdapter.ViewHolder>() {
+class PopularListAdapter(private val listener: (ResultsItemPopular) -> Unit) : PagingDataAdapter<ResultsItemPopular,PopularListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var contextAdapter : Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -20,10 +22,11 @@ class PopularListAdapter(private val data: List<ResultsItemPopular>, private val
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(data[position], listener, contextAdapter)
+        val data = getItem(position)
+        if (data != null){
+            holder.bind(data, listener, contextAdapter)
+        }
     }
-
-    override fun getItemCount(): Int = data.size
 
     inner class ViewHolder(private val binding: ItemListMoviesBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(item : ResultsItemPopular, listener: (ResultsItemPopular) -> Unit, context : Context){
@@ -42,6 +45,18 @@ class PopularListAdapter(private val data: List<ResultsItemPopular>, private val
             }
             itemView.setOnClickListener{
                 listener(item)
+            }
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemPopular>() {
+            override fun areItemsTheSame(oldItem: ResultsItemPopular, newItem: ResultsItemPopular): Boolean {
+                return oldItem == newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ResultsItemPopular, newItem: ResultsItemPopular): Boolean {
+                return oldItem.id == newItem.id
             }
         }
     }

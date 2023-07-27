@@ -4,6 +4,12 @@ plugins {
     id 'kotlin-parcelize'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     compileSdk 32
 
@@ -13,8 +19,8 @@ android {
         targetSdk 32
         versionCode 1
         versionName "1.0"
-        buildConfigField("String", "BASE_URL", '"https://api.themoviedb.org/3/movie/"')
-        buildConfigField("String", "API_KEY", '"9b1762c8bbebc0394c7b9755738e6c1b"')
+        buildConfigField("String", "BASE_URL", "${localProperties['BASE_URL']}")
+        buildConfigField("String", "API_KEY", "${localProperties['API_KEY']}")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -56,6 +62,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5"
+
+    implementation "androidx.paging:paging-runtime-ktx:3.1.0"
 
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 

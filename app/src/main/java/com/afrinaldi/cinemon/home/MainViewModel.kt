@@ -3,6 +3,9 @@ package com.afrinaldi.cinemon.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.afrinaldi.cinemon.core.remote.response.*
 import com.afrinaldi.cinemon.core.repository.MoviesRepository
 import com.afrinaldi.cinemon.core.utils.RequestState
@@ -22,6 +25,11 @@ class MainViewModel : ViewModel(){
 //
 //    private val _upcoming = MutableLiveData<List<ResultsItemUpcoming>>()
 //    val upcoming: LiveData<List<ResultsItemUpcoming>> = _upcoming
+
+    val nowPlaying1: LiveData<PagingData<ResultsItemNowPlaying>> = moviesResponse.getNowPlayingPager().cachedIn(viewModelScope)
+    val popular1: LiveData<PagingData<ResultsItemPopular>> = moviesResponse.getPopularPager().cachedIn(viewModelScope)
+    val topRated1: LiveData<PagingData<ResultsItemTopRated>> = moviesResponse.getTopRatedPager().cachedIn(viewModelScope)
+    val upcoming1: LiveData<PagingData<ResultsItemUpcoming>> = moviesResponse.getUpcomingPager().cachedIn(viewModelScope)
 
     fun getPopular(): LiveData<RequestState<PopularResponse>> = liveData {
         emit(RequestState.Loading)
