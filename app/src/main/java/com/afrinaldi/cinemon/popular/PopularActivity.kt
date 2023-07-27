@@ -4,12 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
 import com.afrinaldi.cinemon.core.ui.PopularListAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
+import com.afrinaldi.cinemon.core.utils.RequestState
 import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityPopularBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
@@ -30,32 +32,40 @@ class PopularActivity : AppCompatActivity() {
     }
 
     private fun showPopular() {
-        mainViewModel.getPopular()
-        mainViewModel.popular.observe(this){
+        mainViewModel.getPopular().observe(this) {
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {showShimmerBar(true)}
+                    is RequestState.Success -> {
+                        showShimmerBar(false)
+                        listPopular.clear()
 
-            listPopular.clear()
-            for (i in it.indices){
-                listPopular.add(
-                    ResultsItemPopular(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+                        it.data.results.forEach { data ->
+                            listPopular.add(ResultsItemPopular(
+                                data.id,
+                                data.title,
+                                data.overview,
+                                data.posterPath,
+                                data.releaseDate,
+                                data.voteAverage
+                            ))
+                        }
 
-            if (listPopular.isNotEmpty()){
-                showShimmerBar(false)
-                binding.rvPopular.adapter = PopularListAdapter(listPopular) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        if (listPopular.isNotEmpty()){
+                            binding.rvPopular.adapter = PopularListAdapter(listPopular) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        showShimmerBar(false)
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

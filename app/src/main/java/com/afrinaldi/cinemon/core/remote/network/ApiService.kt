@@ -11,26 +11,26 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("popular")
-    fun getPopular(
+    suspend fun getPopular(
         @Query("api_key") api_key: String = API_KEY,
         @Query("language") language: String = "en-US"
-    ): Call<PopularResponse>
+    ): PopularResponse
 
     @GET("now_playing")
-    fun getNowPlaying(
+    suspend fun getNowPlaying(
         @Query("api_key") api_key: String = API_KEY,
         @Query("language") language: String = "en-US"
-    ): Call<NowPlayingResponse>
+    ): NowPlayingResponse
 
     @GET("top_rated")
-    fun getTopRated(
+    suspend fun getTopRated(
         @Query("api_key") api_key: String = API_KEY,
         @Query("language") language: String = "en-US"
-    ): Call<TopRatedResponse>
+    ): TopRatedResponse
 
     @GET("upcoming")
-    fun getUpcoming(
+    suspend fun getUpcoming(
         @Query("api_key") api_key: String = API_KEY,
         @Query("language") language: String = "en-US"
-    ): Call<UpcomingResponse>
+    ): UpcomingResponse
 }

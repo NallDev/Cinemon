@@ -4,12 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
+import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
 import com.afrinaldi.cinemon.core.ui.NowPlayingListAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
+import com.afrinaldi.cinemon.core.utils.RequestState
 import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityNowPlayingBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
@@ -32,31 +35,42 @@ class NowPlayingActivity : AppCompatActivity() {
     }
 
     private fun showNowPlaying() {
-        mainViewModel.getNowPlaying()
-        mainViewModel.nowPlaying.observe(this){
-            listNowPlaying.clear()
-            for (i in it.indices){
-                listNowPlaying.add(
-                    ResultsItemNowPlaying(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+        mainViewModel.getNowPlaying().observe(this) {
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {showShimmerBar(true)}
+                    is RequestState.Success -> {
+                        showShimmerBar(false)
+                        listNowPlaying.clear()
 
-            if (listNowPlaying.isNotEmpty()){
-                showShimmerBar(false)
-                binding.rvNowPlaying.adapter = NowPlayingListAdapter(listNowPlaying) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        it.data.results.forEach { data ->
+                            listNowPlaying.add(
+                                ResultsItemNowPlaying(
+                                    data.id,
+                                    data.title,
+                                    data.overview,
+                                    data.posterPath,
+                                    data.releaseDate,
+                                    data.voteAverage
+                                )
+                            )
+                        }
+
+                        if (listNowPlaying.isNotEmpty()){
+                            binding.rvNowPlaying.adapter = NowPlayingListAdapter(listNowPlaying) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        showShimmerBar(false)
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }

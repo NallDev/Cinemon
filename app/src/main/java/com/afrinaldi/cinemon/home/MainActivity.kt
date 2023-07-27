@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.afrinaldi.cinemon.R
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
@@ -53,31 +54,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showUpcoming() {
-        mainViewModel.getUpcoming()
-        mainViewModel.upcoming.observe(this){
-            listUpcoming.clear()
-            for (i in it.indices){
-                listUpcoming.add(
-                    ResultsItemUpcoming(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+        mainViewModel.getUpcoming().observe(this){
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {}
+                    is RequestState.Success -> {
+                        dialog.isDismiss()
+                        listUpcoming.clear()
+                        it.data.results.forEach { data ->
+                            listUpcoming.add(ResultsItemUpcoming(
+                                data.id,
+                                data.title,
+                                data.overview,
+                                data.posterPath,
+                                data.releaseDate,
+                                data.voteAverage
+                            ))
+                        }
 
-            if (listUpcoming.isNotEmpty()){
-                dialog.isDismiss()
-                binding.rvUpcoming.adapter = UpcomingAdapter(listUpcoming) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        if (listUpcoming.isNotEmpty()){
+                            binding.rvUpcoming.adapter = UpcomingAdapter(listUpcoming) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        dialog.isDismiss()
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -85,30 +94,41 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showTopRated() {
-        mainViewModel.getTopRated()
-        mainViewModel.topRated.observe(this){
-            listTopRated.clear()
-            for (i in it.indices){
-                listTopRated.add(
-                    ResultsItemTopRated(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+        mainViewModel.getTopRated().observe(this){
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {}
+                    is RequestState.Success -> {
+                        dialog.isDismiss()
+                        listTopRated.clear()
+                        it.data.results.forEach { data ->
+                            listTopRated.add(
+                                ResultsItemTopRated(
+                                data.id,
+                                data.title,
+                                data.overview,
+                                data.posterPath,
+                                data.releaseDate,
+                                data.voteAverage
+                            )
+                            )
+                        }
 
-            if (listTopRated.isNotEmpty()){
-                binding.rvTopRated.adapter = TopRatedAdapter(listTopRated) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        if (listTopRated.isNotEmpty()){
+                            binding.rvTopRated.adapter = TopRatedAdapter(listTopRated) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        dialog.isDismiss()
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -116,44 +136,56 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showPopular() {
-        mainViewModel.getPopular()
-        mainViewModel.popular.observe(this){
-            Glide.with(this)
-                .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2${it[0].posterPath}")
-                .into(binding.ivRecommendation)
-            binding.tvTitleRecommendation.text = it[0].title
-            binding.ivRecommendation.setOnClickListener { _ ->
-                Intent(this, DetailActivity::class.java).also { intent ->
-                    intent.putExtra(TITLE, it[0].title)
-                    intent.putExtra(RATING, it[0].voteAverage.toString())
-                    intent.putExtra(IMAGE, it[0].posterPath)
-                    intent.putExtra(OVERVIEW, it[0].overview)
-                    startActivity(intent)
-                }
-            }
+        mainViewModel.getPopular().observe(this) {
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {}
+                    is RequestState.Success -> {
+                        dialog.isDismiss()
+                        listPopular.clear()
 
-            listPopular.clear()
-            for (i in it.indices){
-                listPopular.add(
-                    ResultsItemPopular(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+                        it.data.results.also { data ->
+                            Glide.with(this)
+                                .load("https://image.tmdb.org/t/p/w600_and_h900_bestv2${data[0].posterPath}")
+                                .into(binding.ivRecommendation)
+                            binding.tvTitleRecommendation.text = data[0].title
+                            binding.ivRecommendation.setOnClickListener { _ ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data[0].title)
+                                    intent.putExtra(RATING, data[0].voteAverage.toString())
+                                    intent.putExtra(IMAGE, data[0].posterPath)
+                                    intent.putExtra(OVERVIEW, data[0].overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
 
-            if (listPopular.isNotEmpty()){
-                binding.rvPopular.adapter = PopularAdapter(listPopular) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        it.data.results.forEach { data ->
+                            listPopular.add(ResultsItemPopular(
+                                data.id,
+                                data.title,
+                                data.overview,
+                                data.posterPath,
+                                data.releaseDate,
+                                data.voteAverage
+                            ))
+                        }
+
+                        if (listPopular.isNotEmpty()){
+                            binding.rvPopular.adapter = PopularAdapter(listPopular) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        dialog.isDismiss()
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -161,30 +193,42 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun showNowPlaying() {
-        mainViewModel.getNowPlaying()
-        mainViewModel.nowPlaying.observe(this){
-            listNowPlaying.clear()
-            for (i in it.indices){
-                listNowPlaying.add(
-                    ResultsItemNowPlaying(
-                        it[i].id,
-                        it[i].title,
-                        it[i].overview,
-                        it[i].posterPath,
-                        it[i].releaseDate,
-                        it[i].voteAverage
-                    )
-                )
-            }
+        mainViewModel.getNowPlaying().observe(this) {
+            if (it != null){
+                when(it) {
+                    is RequestState.Loading -> {}
+                    is RequestState.Success -> {
+                        dialog.isDismiss()
+                        listNowPlaying.clear()
 
-            if (listNowPlaying.isNotEmpty()){
-                binding.rvNowPlaying.adapter = NowPlayingAdapter(listNowPlaying) { data ->
-                    Intent(this, DetailActivity::class.java).also { intent ->
-                        intent.putExtra(TITLE, data.title)
-                        intent.putExtra(RATING, data.voteAverage.toString())
-                        intent.putExtra(IMAGE, data.posterPath)
-                        intent.putExtra(OVERVIEW, data.overview)
-                        startActivity(intent)
+                        it.data.results.forEach { data ->
+                            listNowPlaying.add(
+                                ResultsItemNowPlaying(
+                                data.id,
+                                data.title,
+                                data.overview,
+                                data.posterPath,
+                                data.releaseDate,
+                                data.voteAverage
+                            )
+                            )
+                        }
+
+                        if (listNowPlaying.isNotEmpty()){
+                            binding.rvNowPlaying.adapter = NowPlayingAdapter(listNowPlaying) { data ->
+                                Intent(this, DetailActivity::class.java).also { intent ->
+                                    intent.putExtra(TITLE, data.title)
+                                    intent.putExtra(RATING, data.voteAverage.toString())
+                                    intent.putExtra(IMAGE, data.posterPath)
+                                    intent.putExtra(OVERVIEW, data.overview)
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    }
+                    is RequestState.Error -> {
+                        dialog.isDismiss()
+                        Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
