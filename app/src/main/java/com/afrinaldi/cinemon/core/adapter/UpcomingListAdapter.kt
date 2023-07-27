@@ -1,4 +1,4 @@
-package com.afrinaldi.cinemon.core.ui
+package com.afrinaldi.cinemon.core.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,12 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afrinaldi.cinemon.R
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemTopRated
+import com.afrinaldi.cinemon.core.remote.response.ResultsItemUpcoming
 import com.afrinaldi.cinemon.databinding.ItemListMoviesBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class TopRatedListAdapter(private val listener: (ResultsItemTopRated) -> Unit) : PagingDataAdapter<ResultsItemTopRated, TopRatedListAdapter.ViewHolder>(
+class UpcomingListAdapter(private val listener: (ResultsItemUpcoming) -> Unit) : PagingDataAdapter<ResultsItemUpcoming, UpcomingListAdapter.ViewHolder>(
     DIFF_CALLBACK) {
     private lateinit var contextAdapter : Context
 
@@ -30,7 +30,7 @@ class TopRatedListAdapter(private val listener: (ResultsItemTopRated) -> Unit) :
     }
 
     inner class ViewHolder(private val binding: ItemListMoviesBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item : ResultsItemTopRated, listener: (ResultsItemTopRated) -> Unit, context : Context){
+        fun bind(item : ResultsItemUpcoming, listener: (ResultsItemUpcoming) -> Unit, context : Context){
             with(binding) {
                 tvTitle.text = item.title
                 tvRating.text = item.voteAverage.toString()
@@ -51,12 +51,12 @@ class TopRatedListAdapter(private val listener: (ResultsItemTopRated) -> Unit) :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemTopRated>() {
-            override fun areItemsTheSame(oldItem: ResultsItemTopRated, newItem: ResultsItemTopRated): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemUpcoming>() {
+            override fun areItemsTheSame(oldItem: ResultsItemUpcoming, newItem: ResultsItemUpcoming): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ResultsItemTopRated, newItem: ResultsItemTopRated): Boolean {
+            override fun areContentsTheSame(oldItem: ResultsItemUpcoming, newItem: ResultsItemUpcoming): Boolean {
                 return oldItem.id == newItem.id
             }
         }

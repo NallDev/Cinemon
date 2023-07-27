@@ -11,10 +11,10 @@ import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemTopRated
 import com.afrinaldi.cinemon.core.remote.response.ResultsItemUpcoming
-import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
-import com.afrinaldi.cinemon.core.ui.PopularAdapter
-import com.afrinaldi.cinemon.core.ui.TopRatedAdapter
-import com.afrinaldi.cinemon.core.ui.UpcomingAdapter
+import com.afrinaldi.cinemon.core.adapter.NowPlayingAdapter
+import com.afrinaldi.cinemon.core.adapter.PopularAdapter
+import com.afrinaldi.cinemon.core.adapter.TopRatedAdapter
+import com.afrinaldi.cinemon.core.adapter.UpcomingAdapter
 import com.afrinaldi.cinemon.core.utils.*
 import com.afrinaldi.cinemon.databinding.ActivityMainBinding
 import com.afrinaldi.cinemon.detail.DetailActivity

@@ -1,4 +1,4 @@
-package com.afrinaldi.cinemon.core.ui
+package com.afrinaldi.cinemon.core.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

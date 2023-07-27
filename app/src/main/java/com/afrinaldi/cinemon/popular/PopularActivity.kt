@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import com.afrinaldi.cinemon.core.ui.PopularListAdapter
+import com.afrinaldi.cinemon.core.adapter.PopularListAdapter
+import com.afrinaldi.cinemon.core.data.LoadingStateAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
@@ -33,7 +34,11 @@ class PopularActivity : AppCompatActivity() {
                 intent.putExtra(OVERVIEW, data.overview)
                 startActivity(intent)
             } }
-        binding.rvPopular.adapter = popularListAdapter
+        binding.rvPopular.adapter = popularListAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                popularListAdapter.retry()
+            }
+        )
         showPopular()
     }
 

@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import com.afrinaldi.cinemon.core.ui.UpcomingListAdapter
+import com.afrinaldi.cinemon.core.adapter.UpcomingListAdapter
+import com.afrinaldi.cinemon.core.data.LoadingStateAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
@@ -38,7 +39,11 @@ class UpcomingActivity : AppCompatActivity() {
             }
         }
 
-        binding.rvUpcoming.adapter = upcomingListAdapter
+        binding.rvUpcoming.adapter = upcomingListAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                upcomingListAdapter.retry()
+            }
+        )
 
         showUpcoming()
     }

@@ -1,4 +1,4 @@
-package com.afrinaldi.cinemon.core.ui
+package com.afrinaldi.cinemon.core.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,12 +7,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.afrinaldi.cinemon.R
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemPopular
+import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
 import com.afrinaldi.cinemon.databinding.ItemListMoviesBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
-class PopularListAdapter(private val listener: (ResultsItemPopular) -> Unit) : PagingDataAdapter<ResultsItemPopular,PopularListAdapter.ViewHolder>(DIFF_CALLBACK) {
+class NowPlayingListAdapter(
+                            private val listener: (ResultsItemNowPlaying) -> Unit) : PagingDataAdapter<ResultsItemNowPlaying ,NowPlayingListAdapter.ViewHolder>(DIFF_CALLBACK) {
     private lateinit var contextAdapter : Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,9 +28,8 @@ class PopularListAdapter(private val listener: (ResultsItemPopular) -> Unit) : P
             holder.bind(data, listener, contextAdapter)
         }
     }
-
     inner class ViewHolder(private val binding: ItemListMoviesBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(item : ResultsItemPopular, listener: (ResultsItemPopular) -> Unit, context : Context){
+        fun bind(item : ResultsItemNowPlaying, listener: (ResultsItemNowPlaying) -> Unit, context : Context){
             with(binding) {
                 tvTitle.text = item.title
                 tvRating.text = item.voteAverage.toString()
@@ -50,12 +50,12 @@ class PopularListAdapter(private val listener: (ResultsItemPopular) -> Unit) : P
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemPopular>() {
-            override fun areItemsTheSame(oldItem: ResultsItemPopular, newItem: ResultsItemPopular): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItemNowPlaying>() {
+            override fun areItemsTheSame(oldItem: ResultsItemNowPlaying, newItem: ResultsItemNowPlaying): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ResultsItemPopular, newItem: ResultsItemPopular): Boolean {
+            override fun areContentsTheSame(oldItem: ResultsItemNowPlaying, newItem: ResultsItemNowPlaying): Boolean {
                 return oldItem.id == newItem.id
             }
         }

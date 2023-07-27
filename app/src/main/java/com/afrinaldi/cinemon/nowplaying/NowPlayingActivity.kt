@@ -3,25 +3,17 @@ package com.afrinaldi.cinemon.nowplaying
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
-import com.afrinaldi.cinemon.core.remote.response.ResultsItemNowPlaying
-import com.afrinaldi.cinemon.core.ui.NowPlayingAdapter
-import com.afrinaldi.cinemon.core.ui.NowPlayingListAdapter
+import com.afrinaldi.cinemon.core.adapter.NowPlayingListAdapter
+import com.afrinaldi.cinemon.core.data.LoadingStateAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
-import com.afrinaldi.cinemon.core.utils.RequestState
 import com.afrinaldi.cinemon.core.utils.TITLE
 import com.afrinaldi.cinemon.databinding.ActivityNowPlayingBinding
 import com.afrinaldi.cinemon.detail.DetailActivity
 import com.afrinaldi.cinemon.home.MainViewModel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class NowPlayingActivity : AppCompatActivity() {
 
@@ -46,7 +38,11 @@ class NowPlayingActivity : AppCompatActivity() {
             }
         }
 
-        binding.rvNowPlaying.adapter = movieAdapter
+        binding.rvNowPlaying.adapter = movieAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                movieAdapter.retry()
+            }
+        )
 
         showNowPlaying()
     }

@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import com.afrinaldi.cinemon.core.ui.TopRatedListAdapter
+import com.afrinaldi.cinemon.core.adapter.TopRatedListAdapter
+import com.afrinaldi.cinemon.core.data.LoadingStateAdapter
 import com.afrinaldi.cinemon.core.utils.IMAGE
 import com.afrinaldi.cinemon.core.utils.OVERVIEW
 import com.afrinaldi.cinemon.core.utils.RATING
@@ -36,7 +37,11 @@ class TopRatedActivity : AppCompatActivity() {
             }
         }
 
-        binding.rvTopRated.adapter = topRatedListAdapter
+        binding.rvTopRated.adapter = topRatedListAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                topRatedListAdapter.retry()
+            }
+        )
 
         showTopRated()
     }
